@@ -1,74 +1,81 @@
 # 🌍 AIQ (Air Intelligence Quality) Pipeline
 
-A production-grade data engineering pipeline for processing air quality data from 7 Asian cities using Parquet data lake and DuckDB warehouse.
+Một Pipeline xử lý dữ liệu ở mức production cho phép xử lý dữ liệu chất lượng không khí từ 7 thành phố châu Á sử dụng Parquet Data Lake và DuckDB Warehouse.
 
-## 📊 Dataset Overview
+## 📊 Tổng Quan Dữ Liệu
 
-- **Cities**: Bangkok, Beijing, Hanoi, Ho Chi Minh, Jakarta, Nantong, Singapore
-- **Time Period**: August 2022 - February 2026
-- **Records**: 9,085 observations
-- **Features**: 11 air quality metrics (PM2.5, PM10, CO, NO2, SO2, O3, etc.)
-- **Size**: ~2.6 MB (lightweight - included in repo)
+- **Thành phố**: Bangkok, Beijing, Hà Nội, Thành phố Hồ Chí Minh, Jakarta, Nantong, Singapore
+- **Khoảng thời gian**: Tháng 8 năm 2022 - Tháng 2 năm 2026
+- **Số bản ghi**: 9.085 quan sát
+- **Các tính năng**: 11 chỉ số chất lượng không khí (PM2.5, PM10, CO, NO2, SO2, O3, v.v.)
+- **Dung lượng**: ~2.6 MB (nhẹ - bao gồm trong repo)
 
-## 🏗️ Architecture
+## 📥 Nguồn Dữ Liệu
+
+**Dataset**: Khả dụng trên Kaggle  
+🔗 [nitirajkulkarni/datasets](https://www.kaggle.com/nitirajkulkarni/datasets)
+
+Dữ liệu chất lượng không khí được lấy từ Kaggle và bao gồm các bản ghi lịch sử cho 7 thành phố lớn ở châu Á.
+
+## 🏗️ Kiến Trúc
 
 ```
-RAW DATA (CSV) → INGESTION → CLEANING → VALIDATION → DATA LAKE (Parquet) + WAREHOUSE (DuckDB) → REPORTS (HTML)
+DỮ LIỆU GỐC (CSV) → INGESTION → CLEANING → VALIDATION → DATA LAKE (Parquet) + WAREHOUSE (DuckDB) → REPORTS (HTML)
 ```
 
-## 🚀 Quick Start
+## 🚀 Bắt Đầu Nhanh
 
-### Prerequisites
+### Yêu Cầu Trước
 - Python 3.8+
 - Git
 
-### Installation
+### Cài Đặt
 
 ```bash
 # Clone repository
 git clone https://github.com/ThanhTT666/AIQ-Pipeline.git
 cd AIQ-Pipeline
 
-# Create virtual environment
+# Tạo virtual environment
 python -m venv .venv
 
-# Activate virtual environment
-# On Windows:
+# Kích hoạt virtual environment
+# Trên Windows:
 .\.venv\Scripts\Activate.ps1
-# On macOS/Linux:
+# Trên macOS/Linux:
 source .venv/bin/activate
 
-# Install dependencies
+# Cài đặt dependencies
 pip install -r requirements.txt
 pip install duckdb pyarrow
 ```
 
-### Run Pipeline
+### Chạy Pipeline
 
 ```bash
-# Navigate to pipeline directory
+# Điều hướng đến thư mục pipeline
 cd src/pipeline
 
-# Execute pipeline (all 7 phases)
+# Thực thi pipeline (7 giai đoạn)
 python run_pipeline.py
 ```
 
-### Generate Report
+### Tạo Báo Cáo
 
 ```bash
-# From project root
+# Từ thư mục gốc dự án
 cd src/inspection
 python generate_report.py
 
-# Open the HTML report in browser
-# File location: ../../../reports/pipeline_report.html
+# Mở báo cáo HTML trong trình duyệt
+# Vị trí file: ../../../reports/pipeline_report.html
 ```
 
-## 📂 Project Structure
+## 📂 Cấu Trúc Dự Án
 
 ```
 AIQ-Pipeline/
-├── AIQ_datasets/              # Source data (included - 2.6 MB)
+├── AIQ_datasets/              # Dữ liệu gốc (bao gồm - 2.6 MB)
 │   ├── Bangkok/
 │   ├── Beijing/
 │   ├── Hanoi/
@@ -78,19 +85,19 @@ AIQ-Pipeline/
 │   └── Singapore/
 │
 ├── src/
-│   ├── ingestion/             # Data loading
+│   ├── ingestion/             # Tải dữ liệu
 │   │   └── load_data.py
 │   ├── pipeline/              # Orchestration
 │   │   └── run_pipeline.py
-│   ├── processing/            # Transformations
+│   ├── processing/            # Chuyển đổi dữ liệu
 │   │   ├── clean_data.py
 │   │   ├── transform_data.py
 │   │   ├── parquet_lake.py
 │   │   └── duckdb_warehouse.py
-│   ├── quality/               # Validation & logging
+│   ├── quality/               # Validation & Logging
 │   │   ├── data_quality.py
 │   │   └── logger.py
-│   └── inspection/            # Reporting
+│   └── inspection/            # Báo cáo
 │       ├── generate_report.py
 │       └── inspect_results.py
 │
@@ -100,56 +107,47 @@ AIQ-Pipeline/
 └── .gitignore
 ```
 
-## 🔄 Pipeline Phases
+## 🔄 Các Giai Đoạn Pipeline
 
-| Phase | Description | Output |
-|-------|-------------|--------|
-| 1 | Load CSV from 7 cities | Combined DataFrame (9,085 rows) |
-| 2 | Clean & validate data | Deduplicated, standardized dates |
-| 3a | Export to Parquet Data Lake | city=Bangkok/, city=Beijing/, ... |
-| 3b | Calculate analytics | summary_metrics.csv |
-| 4 | Load to DuckDB Warehouse | fact_air_quality, dim_city, daily_city_metrics |
-| Report | Generate interactive dashboard | pipeline_report.html |
+| Giai Đoạn | Mô Tả | Đầu Ra |
+|-----------|--------|--------|
+| 1 | Tải CSV từ 7 thành phố | DataFrame kết hợp (9.085 hàng) |
+| 2 | Làm sạch & xác thực dữ liệu | Loại bỏ bản sao, chuẩn hóa ngày |
+| 3a | Xuất sang Parquet Data Lake | city=Bangkok/, city=Beijing/, ... |
+| 3b | Tính toán phân tích | summary_metrics.csv |
+| 4 | Tải sang DuckDB Warehouse | fact_air_quality, dim_city, daily_city_metrics |
+| Báo Cáo | Tạo dashboard tương tác | pipeline_report.html |
 
-## 💡 Key Features
+## 💡 Các Tính Năng Chính
 
-✅ **Relative Paths** - Works on Windows, macOS, Linux  
-✅ **Automatic City Detection** - Extracts city from folder structure  
-✅ **Multi-format Date Parsing** - Handles M/D/YYYY and YYYY-MM-DD  
-✅ **Structured Logging** - Track pipeline execution  
-✅ **Data Validation** - Quality checks at each phase  
-✅ **Parquet Partitioning** - Efficient data lake organization  
-✅ **DuckDB OLAP** - Fast analytical queries  
-✅ **HTML Reports** - Interactive dashboards  
+✅ **Relative Paths** - Hoạt động trên Windows, macOS, Linux  
+✅ **Automatic City Detection** - Trích xuất thành phố từ cấu trúc thư mục  
+✅ **Multi-format Date Parsing** - Xử lý M/D/YYYY và YYYY-MM-DD  
+✅ **Structured Logging** - Theo dõi quá trình thực thi pipeline  
+✅ **Data Validation** - Kiểm tra chất lượng tại mỗi giai đoạn  
+✅ **Parquet Partitioning** - Tổ chức Data Lake hiệu quả  
+✅ **DuckDB OLAP** - Truy vấn phân tích nhanh  
+✅ **HTML Reports** - Dashboard tương tác  
 
 ## 🛠️ Tech Stack
 
-- **Python 3.8+** - Language
-- **Pandas** - Data manipulation
-- **PyArrow** - Parquet support
-- **DuckDB** - OLAP database
-- **Logging** - Pipeline monitoring
+- **Python 3.8+** - Ngôn ngữ lập trình
+- **Pandas** - Thao tác dữ liệu
+- **PyArrow** - Hỗ trợ Parquet
+- **DuckDB** - OLAP Database
+- **Logging** - Giám sát Pipeline
 
-## 📈 Performance
+## 📈 Hiệu Năng
 
-- **Runtime**: 3-5 seconds
-- **Data Lake Size**: ~2.5 MB (Parquet)
-- **Warehouse Size**: ~1.2 MB (DuckDB)
-- **Memory Usage**: <500 MB
+- **Thời gian chạy**: 3-5 giây
+- **Dung lượng Data Lake**: ~2.5 MB (Parquet)
+- **Dung lượng Warehouse**: ~1.2 MB (DuckDB)
+- **Sử dụng Bộ nhớ**: <500 MB
 
-## 📄 Documentation
-
-See [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) for detailed architecture and DE concepts.
-
-## 📄 License
+## 📄 Giấy Phép
 
 MIT License
 
-## 👤 Author
+## 👤 Tác Giả
 
 ThanhTT666
-
----
-
-**Status**: ✅ Production Ready  
-**Last Updated**: March 9, 2026
